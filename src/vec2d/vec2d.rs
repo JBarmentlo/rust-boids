@@ -1,9 +1,9 @@
 use std::ops::{Add, Sub, Div, Mul};
 
 #[derive(Debug, Clone, Copy)]
-struct Vec2D {
-    x : f32,
-    y : f32,
+pub struct Vec2D {
+    pub x : f32,
+    pub y : f32,
 }
 
 
