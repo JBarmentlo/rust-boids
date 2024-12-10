@@ -15,7 +15,7 @@ async fn main() {
     let w = screen_width() as usize;
     let h = screen_height() as usize;
 
-    let mut boids = iter::from_fn(|| {
+    let mut boids: Vec<Boid> = iter::from_fn(|| {
         Some(Boid::random())
     })
     .take(N_BOIDS)
@@ -34,11 +34,13 @@ async fn main() {
         let h = image.height();
 
 
-        for boid in boids {
+        for boid in boids.iter() {
 
             image.set_pixel(
-                boid.position.x % h,
-                boid.position.y % w,
+                // boid.position.x % h,
+                // boid.position.y % w,
+                10,
+                10,
                 BLACK,
             );
         }

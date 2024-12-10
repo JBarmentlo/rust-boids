@@ -4,7 +4,7 @@ use crate::boids::constants::*;
 use crate::vec2d::Vec2D;
 
 
-#[derive(Debug, Clone, Copy, Default)]
+#[derive(Debug, Clone, Copy)]
 pub struct Boid {
     pub position: Vec2D,
     pub velocity: Vec2D,
@@ -32,11 +32,11 @@ impl Boid {
 
     pub fn random() -> Self {
         Self::random_range(
-            Vec2D { x: EDGE_MARGIN               , y: EDGE_MARGIN }  ,
-            Vec2D { x: WORLD_SIZE_X - EDGE_MARGIN, y: WORLD_SIZE_Y - EDGE_MARGIN },
-            Vec2D { x: MIN_SPEED / 2_f32.sqrt() , y: MIN_SPEED / 2_f32.sqrt() } ,
-            Vec2D { x: MAX_SPEED / 2_f32.sqrt() , y: MIN_SPEED / 2_f32.sqrt() }  ,
-        );
+            Vec2D { x: EDGE_MARGIN               ,       y: EDGE_MARGIN }  ,
+            Vec2D { x: WORLD_SIZE_X as f32 - EDGE_MARGIN, y: WORLD_SIZE_Y as f32 - EDGE_MARGIN },
+            Vec2D { x: MIN_SPEED / 2_f32.sqrt()  ,       y: MIN_SPEED / 2_f32.sqrt() } ,
+            Vec2D { x: MAX_SPEED / 2_f32.sqrt()  ,       y: MIN_SPEED / 2_f32.sqrt() }  ,
+        )
     }
 }
 
