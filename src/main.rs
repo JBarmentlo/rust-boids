@@ -51,7 +51,7 @@ async fn main() {
         texture.update(&image);
 
         draw_texture(&texture, 0., 0., WHITE);
-        flock = flock.next_step();
+        flock = flock.next_baby_step();
         next_frame().await
     }
 }

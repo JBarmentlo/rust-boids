@@ -45,10 +45,25 @@ impl Boid {
     //     vals.min()
     // }
 
+    pub fn distance(&self, other: &Boid) -> f32 {
+        self.position.distance(&other.position)
+    }
+
+
     pub fn time_step<'a, I>(&self, others: I) -> Self 
     where
         I: Iterator<Item= &'a Self> // TODO: understand lifetimes
     {
+        // let average_neighbour = others.filter(|b| self.distance())
+        // let distances = others.map(|b| (b, self.distance(b)));
+        // let visible = others.filter(|b| self.distance(b) < PERCEPTION_RANGE);
+        let other_vec: Vec<&Boid> = others.collect();
+
+        let visible   = other_vec.iter().filter(|b| self.distance(b) < PERCEPTION_RANGE).map(|b| *b);
+        let avoidable = other_vec.iter().filter(|b| self.distance(b) < AVOIDANCE_RANGE).map(|b| *b);
+
+        
+
         Self {
             position: Vec2D {
                 x: self.position.x + 10.,

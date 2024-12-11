@@ -1,5 +1,5 @@
-// pub const PERCEPTION_RANGE : f32 = 20.;
-// pub const AVOIDANCE_RANGE  : f32 = 2.;
+pub const PERCEPTION_RANGE : f32 = 20.;
+pub const AVOIDANCE_RANGE  : f32 = 2.;
 pub const EDGE_MARGIN      : f32 = 50.;
 pub const WORLD_SIZE_X     : u32 = 500;
 pub const WORLD_SIZE_Y     : u32 = 500;

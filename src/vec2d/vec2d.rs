@@ -7,6 +7,13 @@ pub struct Vec2D {
 }
 
 
+impl Vec2D {
+    pub fn distance(&self, other: &Vec2D) -> f32 {
+        let diff = *other - *self;
+        ((diff.x * diff.x) + (diff.y * diff.y)).sqrt()
+    }
+}
+
 impl Add for Vec2D {
     type Output = Vec2D;
 
