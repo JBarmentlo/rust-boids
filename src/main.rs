@@ -15,7 +15,7 @@ async fn main() {
     let h = screen_height() as usize;
 
 
-    let flock = Flock::random(10);
+    let mut flock = Flock::random(10);
     // let mut buffer = vec![CellState::Dead; w * h];
 
     let mut image = Image::gen_image_color(w as u16, h as u16, WHITE);
@@ -51,6 +51,7 @@ async fn main() {
         texture.update(&image);
 
         draw_texture(&texture, 0., 0., WHITE);
+        flock = flock.next_step();
         next_frame().await
     }
 }

@@ -36,6 +36,38 @@ impl Boid {
             Vec2D { x: MAX_SPEED / 2_f32.sqrt()  ,       y: MIN_SPEED / 2_f32.sqrt() }  ,
         )
     }
+
+    // fn find_min<'a, I>(vals: I) -> Option<&'a u32>
+    // where
+    //     I: Iterator<Item = &'a u32>,
+    // I: IntoIterator<Item = &'a u32>,
+    // {
+    //     vals.min()
+    // }
+
+    pub fn time_step<'a, I>(&self, others: I) -> Self 
+    where
+        I: Iterator<Item= &'a Self> // TODO: understand lifetimes
+    {
+        Self {
+            position: Vec2D {
+                x: self.position.x + 10.,
+                y: self.position.y,
+            },
+            velocity: self.velocity,
+        }
+    }
+
+    pub fn baby_step(&self) -> Self 
+    {
+        Self {
+            position: Vec2D {
+                x: self.position.x + 10.,
+                y: self.position.y,
+            },
+            velocity: self.velocity,
+        }
+    }
 }
 
 impl Add for Boid {
