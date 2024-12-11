@@ -69,10 +69,10 @@ impl Boid {
         let aling_vec    = self.position - average_visible.velocity;
         let cohesion_vec = average_visible.position - self.position;
 
-
+        let velocity = self.velocity * (1. - COHESION_FACTOR - AVOIDANCE_FACTOR) +  cohesion_vec * COHESION_FACTOR + avoid_vec * AVOIDANCE_FACTOR;
         Self {
-            position: self.position * (1. - COHESION_FACTOR - AVOIDANCE_FACTOR) +  cohesion_vec * COHESION_FACTOR + avoid_vec * AVOIDANCE_FACTOR,
-            velocity: self.velocity,
+            position: self.position + velocity,
+            velocity: velocity
         }
     }
 
