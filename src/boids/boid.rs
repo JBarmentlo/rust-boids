@@ -62,11 +62,16 @@ impl Boid {
         let (sum, count) = visible.fold((Boid::default(), 0), |(b, c), x| (b + *x, c + 1));
         let average_visible = sum / count as f32;
 
+        let (sum, count) = avoidable.fold((Boid::default(), 0), |(b, c), x| (b + *x, c + 1));
+        let average_avoidable = sum / count as f32;
+
+        let avoid_vec    = self.position - average_avoidable.position;
+        let aling_vec    = self.position - average_visible.velocity;
+        let cohesion_vec = average_visible.position - self.position;
+
+
         Self {
-            position: Vec2D {
-                x: self.position.x + 10.,
-                y: self.position.y,
-            },
+            position: self.position * (1. - COHESION_FACTOR - AVOIDANCE_FACTOR) +  cohesion_vec * COHESION_FACTOR + avoid_vec * AVOIDANCE_FACTOR,
             velocity: self.velocity,
         }
     }

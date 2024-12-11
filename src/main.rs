@@ -7,6 +7,8 @@ mod boids;
 use boids::Boid;
 use boids::Flock;
 
+use std::thread;
+use std::time::Duration;
 
 
 #[macroquad::main("Boids")]
@@ -32,7 +34,7 @@ async fn main() {
         println!("Loope");
         clear_background(WHITE);
         image = Image::gen_image_color(w as u16, h as u16, WHITE);
-        
+
         let w = image.width() as f32;
         let h = image.height() as f32;
 
@@ -52,7 +54,9 @@ async fn main() {
         texture.update(&image);
 
         draw_texture(&texture, 0., 0., WHITE);
-        flock = flock.next_baby_step();
+        // flock = flock.next_baby_step();
+        flock = flock.next_step();
+        thread::sleep(Duration::from_millis(1000));
         next_frame().await
     }
 }
