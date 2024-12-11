@@ -4,7 +4,7 @@ use super::constants::*;
 use crate::vec2d::Vec2D;
 
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, Default)]
 pub struct Boid {
     pub position: Vec2D,
     pub velocity: Vec2D,
@@ -54,15 +54,13 @@ impl Boid {
     where
         I: Iterator<Item= &'a Self> // TODO: understand lifetimes
     {
-        // let average_neighbour = others.filter(|b| self.distance())
-        // let distances = others.map(|b| (b, self.distance(b)));
-        // let visible = others.filter(|b| self.distance(b) < PERCEPTION_RANGE);
         let other_vec: Vec<&Boid> = others.collect();
 
         let visible   = other_vec.iter().filter(|b| self.distance(b) < PERCEPTION_RANGE).map(|b| *b);
         let avoidable = other_vec.iter().filter(|b| self.distance(b) < AVOIDANCE_RANGE).map(|b| *b);
 
-        
+        let (sum, count) = visible.fold((Boid::default(), 0), |(b, c), x| (b + *x, c + 1));
+        let average_visible = sum / count as f32;
 
         Self {
             position: Vec2D {
