@@ -1,6 +1,6 @@
 use std::ops::{Add, Sub, Div, Mul};
 use rand::Rng;
-use crate::boids::constants::*;
+use super::constants::*;
 use crate::vec2d::Vec2D;
 
 

@@ -1,23 +1,21 @@
 
 use macroquad::prelude::*;
-use std::iter;
 
 mod vec2d;
 mod boids;
 
 use boids::Boid;
+use boids::Flock;
 
 
-const N_BOIDS: usize = 10;
 
 #[macroquad::main("Boids")]
 async fn main() {
     let w = screen_width() as usize;
     let h = screen_height() as usize;
 
-    let mut boids: Vec<Boid> = iter::repeat_with(Boid::random)
-    .take(N_BOIDS)
-    .collect();
+
+    let flock = Flock::random(10);
     // let mut buffer = vec![CellState::Dead; w * h];
 
     let mut image = Image::gen_image_color(w as u16, h as u16, WHITE);
@@ -37,7 +35,7 @@ async fn main() {
         let w = image.width() as f32;
         let h = image.height() as f32;
 
-        for boid in boids.iter() {
+        for boid in flock.boids.iter() {
             // boid.position.x = boid.position.x + 10.;
             let x = (boid.position.x % w) as u32;
             let y = (boid.position.y % h) as u32;
