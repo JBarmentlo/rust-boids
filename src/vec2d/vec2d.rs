@@ -1,4 +1,5 @@
 use std::ops::{Add, Sub, Div, Mul};
+use std::fmt;
 
 #[derive(Debug, Clone, Copy, Default)]
 pub struct Vec2D {
@@ -13,6 +14,17 @@ impl Vec2D {
         ((diff.x * diff.x) + (diff.y * diff.y)).sqrt()
     }
 }
+
+impl fmt::Display for Vec2D {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(
+            f,
+            "Vec2D {{ ({}, {}) }}",
+            self.x, self.y,
+        )
+    }
+}
+
 
 impl Add for Vec2D {
     type Output = Vec2D;

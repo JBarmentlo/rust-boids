@@ -1,5 +1,8 @@
 use std::ops::{Add, Sub, Div, Mul};
 use rand::Rng;
+use std::fmt;
+
+
 use super::constants::*;
 use crate::vec2d::Vec2D;
 
@@ -55,21 +58,37 @@ impl Boid {
         I: Iterator<Item= &'a Self> // TODO: understand lifetimes
     {
         let other_vec: Vec<&Boid> = others.collect();
+        // println!("other boids: {}", other_vec.len());
 
         let visible   = other_vec.iter().filter(|b| self.distance(b) < PERCEPTION_RANGE).map(|b| *b);
         let avoidable = other_vec.iter().filter(|b| self.distance(b) < AVOIDANCE_RANGE).map(|b| *b);
 
-        let (sum, count) = visible.fold((Boid::default(), 0), |(b, c), x| (b + *x, c + 1));
-        let average_visible = sum / count as f32;
+        let (sum, visible_count) = visible.fold((Boid::default(), 0), |(b, c), x| (b + *x, c + 1));
+        // println!("Sum: {}, Count: {}" , sum, visible_count);
+        let average_visible = sum / visible_count as f32;
 
-        let (sum, count) = avoidable.fold((Boid::default(), 0), |(b, c), x| (b + *x, c + 1));
-        let average_avoidable = sum / count as f32;
+        let (sum, avoid_count) = avoidable.fold((Boid::default(), 0), |(b, c), x| (b + *x, c + 1));
+        let average_avoidable = sum / avoid_count as f32;
 
         let avoid_vec    = self.position - average_avoidable.position;
         let aling_vec    = self.position - average_visible.velocity;
         let cohesion_vec = average_visible.position - self.position;
+        
+        // println!("cohesion_vec: {}", cohesion_vec * 0.);
+        // println!("avoid_vec: {}", avoid_vec);
 
-        let velocity = self.velocity * (1. - COHESION_FACTOR - AVOIDANCE_FACTOR) +  cohesion_vec * COHESION_FACTOR + avoid_vec * AVOIDANCE_FACTOR;
+        let mut velocity = self.velocity;
+    
+        if visible_count > 0 {
+            velocity = velocity * (1. - COHESION_FACTOR) +  cohesion_vec * COHESION_FACTOR;
+        }
+
+            
+        if avoid_count > 0 {
+            velocity = velocity * (1. - AVOIDANCE_FACTOR) +  avoid_vec * AVOIDANCE_FACTOR;
+        }
+
+        // println!("Velocity: {}", velocity);
         Self {
             position: self.position + velocity,
             velocity: velocity
@@ -85,6 +104,18 @@ impl Boid {
             },
             velocity: self.velocity,
         }
+    }
+}
+
+
+impl fmt::Display for Boid {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(
+            f,
+            "Boid {{ p: ({}, {}), v: ({}, {}) }}",
+            self.position.x, self.position.y,
+            self.velocity.x, self.velocity.y
+        )
     }
 }
 

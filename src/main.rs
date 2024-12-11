@@ -17,7 +17,7 @@ async fn main() {
     let h = screen_height() as usize;
 
 
-    let mut flock = Flock::random(10);
+    let mut flock = Flock::random(100);
     // let mut buffer = vec![CellState::Dead; w * h];
 
     let mut image = Image::gen_image_color(w as u16, h as u16, WHITE);
@@ -38,6 +38,7 @@ async fn main() {
         let w = image.width() as f32;
         let h = image.height() as f32;
 
+
         for boid in flock.boids.iter() {
             // boid.position.x = boid.position.x + 10.;
             let x = (boid.position.x % w) as u32;
@@ -48,6 +49,7 @@ async fn main() {
                 y,
                 BLACK,
             );
+            // println!("{}", boid);
         }
     
 
@@ -56,7 +58,7 @@ async fn main() {
         draw_texture(&texture, 0., 0., WHITE);
         // flock = flock.next_baby_step();
         flock = flock.next_step();
-        thread::sleep(Duration::from_millis(1000));
+        // thread::sleep(Duration::from_millis(1000));
         next_frame().await
     }
 }
