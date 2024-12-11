@@ -27,24 +27,30 @@ async fn main() {
 
     let texture = Texture2D::from_image(&image);
 
+    let w = image.width() as f32;
+    let h = image.height() as f32;
+
+    println!("h = {}, w = {}", h, w);
+
     loop {
+        println!("Loope");
         clear_background(WHITE);
 
-        let w = image.width();
-        let h = image.height();
-
+        let w = image.width() as f32;
+        let h = image.height() as f32;
 
         for boid in boids.iter() {
-
+            // boid.position.x = boid.position.x + 10.;
+            let x = (boid.position.x % w) as u32;
+            let y = (boid.position.y % h) as u32;
+    
             image.set_pixel(
-                // boid.position.x % h,
-                // boid.position.y % w,
-                10,
-                10,
+                x,
+                y,
                 BLACK,
             );
         }
-
+    
 
         texture.update(&image);
 
