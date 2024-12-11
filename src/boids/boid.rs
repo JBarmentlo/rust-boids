@@ -10,8 +10,6 @@ pub struct Boid {
     pub velocity: Vec2D,
 }
 
-
-
 impl Boid {
     /// Constructs a new Boid with random position and velocity within given ranges.
     pub fn random_range(min_position: Vec2D, max_position: Vec2D, min_velocity: Vec2D, max_velocity: Vec2D) -> Self {

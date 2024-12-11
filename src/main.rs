@@ -15,9 +15,7 @@ async fn main() {
     let w = screen_width() as usize;
     let h = screen_height() as usize;
 
-    let mut boids: Vec<Boid> = iter::from_fn(|| {
-        Some(Boid::random())
-    })
+    let mut boids: Vec<Boid> = iter::repeat_with(Boid::random)
     .take(N_BOIDS)
     .collect();
     // let mut buffer = vec![CellState::Dead; w * h];
