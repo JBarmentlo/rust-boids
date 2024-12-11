@@ -31,7 +31,8 @@ async fn main() {
     loop {
         println!("Loope");
         clear_background(WHITE);
-
+        image = Image::gen_image_color(w as u16, h as u16, WHITE);
+        
         let w = image.width() as f32;
         let h = image.height() as f32;
 
