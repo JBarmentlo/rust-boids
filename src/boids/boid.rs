@@ -80,7 +80,8 @@ impl Boid {
         let mut velocity = self.velocity;
     
         if visible_count > 0 {
-            velocity = velocity * (1. - COHESION_FACTOR) +  cohesion_vec * COHESION_FACTOR;
+            velocity = velocity * (1. - COHESION_FACTOR  ) +  cohesion_vec * COHESION_FACTOR;
+            velocity = velocity * (1. - ALIGNEMENT_FACTOR) +  aling_vec    * ALIGNEMENT_FACTOR;
         }
 
             
@@ -88,21 +89,28 @@ impl Boid {
             velocity = velocity * (1. - AVOIDANCE_FACTOR) +  avoid_vec * AVOIDANCE_FACTOR;
         }
 
-        // println!("Velocity: {}", velocity);
+        if self.position.x < EDGE_MARGIN {
+            velocity.x += EDGE_TURN_FACTOR;
+        } else if self.position.x > WORLD_SIZE_X as f32 - EDGE_MARGIN {
+            velocity.x -= EDGE_TURN_FACTOR;
+        }
+
+        if self.position.y < EDGE_MARGIN {
+            velocity.y += EDGE_TURN_FACTOR;
+        } else if self.position.y > WORLD_SIZE_Y as f32 - EDGE_MARGIN {
+            velocity.y -= EDGE_TURN_FACTOR;
+        }
+
+        let speed = velocity.norm_2();
+        if speed < MIN_SPEED {
+            velocity = velocity * (MIN_SPEED / speed);
+        } else if speed > MAX_SPEED {
+            velocity = velocity * (MAX_SPEED / speed);
+        }
+
         Self {
             position: self.position + velocity,
             velocity: velocity
-        }
-    }
-
-    pub fn baby_step(&self) -> Self 
-    {
-        Self {
-            position: Vec2D {
-                x: self.position.x + 10.,
-                y: self.position.y,
-            },
-            velocity: self.velocity,
         }
     }
 }

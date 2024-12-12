@@ -13,6 +13,10 @@ impl Vec2D {
         let diff = *other - *self;
         ((diff.x * diff.x) + (diff.y * diff.y)).sqrt()
     }
+
+    pub fn norm_2(&self) -> f32 {
+        ((self.x * self.x) + (self.y * self.y)).sqrt()
+    }
 }
 
 impl fmt::Display for Vec2D {

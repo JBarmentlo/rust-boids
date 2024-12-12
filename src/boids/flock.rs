@@ -14,11 +14,6 @@ impl Flock {
         }
     }
 
-    pub fn next_baby_step(&self) -> Self {
-        Flock {
-            boids: self.boids.iter().map(|b| b.baby_step()).collect(),
-        }
-    }
 
     pub fn next_step(&self) -> Self {
         Flock {

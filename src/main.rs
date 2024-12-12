@@ -9,6 +9,7 @@ use boids::Flock;
 
 use std::thread;
 use std::time::Duration;
+use std::time::Instant;
 
 
 #[macroquad::main("Boids")]
@@ -16,8 +17,12 @@ async fn main() {
     let w = screen_width() as usize;
     let h = screen_height() as usize;
 
+    println!("H {}, W {}", h, w);
 
-    let mut flock = Flock::random(100);
+    // let w: usize = 800;
+    // let h: usize = 600;
+
+    let mut flock = Flock::random(2);
     // let mut buffer = vec![CellState::Dead; w * h];
 
     let mut image = Image::gen_image_color(w as u16, h as u16, WHITE);
@@ -38,7 +43,7 @@ async fn main() {
         let w = image.width() as f32;
         let h = image.height() as f32;
 
-
+        let draw_start = Instant::now();
         for boid in flock.boids.iter() {
             // boid.position.x = boid.position.x + 10.;
             let x = (boid.position.x % w) as u32;
@@ -56,9 +61,12 @@ async fn main() {
         texture.update(&image);
 
         draw_texture(&texture, 0., 0., WHITE);
-        // flock = flock.next_baby_step();
+        let draw_duration = draw_start.elapsed();
+
+        let flock_start = Instant::now();
         flock = flock.next_step();
-        // thread::sleep(Duration::from_millis(1000));
+        let flock_duration = flock_start.elapsed();
+        println!("Boid Compute time: {:?}.\nDraw time: {:?}", flock_duration, draw_duration);
         next_frame().await
     }
 }
