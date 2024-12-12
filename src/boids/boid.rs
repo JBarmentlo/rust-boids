@@ -33,20 +33,12 @@ impl Boid {
 
     pub fn random() -> Self {
         Self::random_range(
-            Vec2D { x: EDGE_MARGIN               ,       y: EDGE_MARGIN }  ,
+            Vec2D { x: EDGE_MARGIN                      , y: EDGE_MARGIN                       },
             Vec2D { x: WORLD_SIZE_X as f32 - EDGE_MARGIN, y: WORLD_SIZE_Y as f32 - EDGE_MARGIN },
-            Vec2D { x: MIN_SPEED / 2_f32.sqrt()  ,       y: MIN_SPEED / 2_f32.sqrt() } ,
-            Vec2D { x: MAX_SPEED / 2_f32.sqrt()  ,       y: MIN_SPEED / 2_f32.sqrt() }  ,
+            Vec2D { x: -MAX_SPEED / 2_f32.sqrt()         , y: -MIN_SPEED / 2_f32.sqrt()          },
+            Vec2D { x: MAX_SPEED / 2_f32.sqrt()         , y: MIN_SPEED / 2_f32.sqrt()          },
         )
     }
-
-    // fn find_min<'a, I>(vals: I) -> Option<&'a u32>
-    // where
-    //     I: Iterator<Item = &'a u32>,
-    // I: IntoIterator<Item = &'a u32>,
-    // {
-    //     vals.min()
-    // }
 
     pub fn distance(&self, other: &Boid) -> f32 {
         self.position.distance(&other.position)
@@ -70,9 +62,9 @@ impl Boid {
         let (sum, avoid_count) = avoidable.fold((Boid::default(), 0), |(b, c), x| (b + *x, c + 1));
         let average_avoidable = sum / avoid_count as f32;
 
-        let avoid_vec    = self.position - average_avoidable.position;
-        let aling_vec    = self.position - average_visible.velocity;
-        let cohesion_vec = average_visible.position - self.position;
+        let avoid_vec  = self.position            - average_avoidable.position;
+        let aling_vec  = self.velocity            - average_visible.velocity;
+        let center_vec = average_visible.position - self.position;
         
         // println!("cohesion_vec: {}", cohesion_vec * 0.);
         // println!("avoid_vec: {}", avoid_vec);
@@ -80,13 +72,15 @@ impl Boid {
         let mut velocity = self.velocity;
     
         if visible_count > 0 {
-            velocity = velocity * (1. - COHESION_FACTOR  ) +  cohesion_vec * COHESION_FACTOR;
-            velocity = velocity * (1. - ALIGNEMENT_FACTOR) +  aling_vec    * ALIGNEMENT_FACTOR;
+            // velocity = velocity * (1. - COHESION_FACTOR  ) +  cohesion_vec * COHESION_FACTOR;
+            // velocity = velocity * (1. - ALIGNEMENT_FACTOR) +  aling_vec    * ALIGNEMENT_FACTOR;
+            velocity = velocity + center_vec * COHESION_FACTOR + aling_vec * ALIGNEMENT_FACTOR;
         }
 
             
         if avoid_count > 0 {
-            velocity = velocity * (1. - AVOIDANCE_FACTOR) +  avoid_vec * AVOIDANCE_FACTOR;
+            // velocity = velocity * (1. - AVOIDANCE_FACTOR) +  avoid_vec * AVOIDANCE_FACTOR;
+            velocity = velocity +  avoid_vec * AVOIDANCE_FACTOR;
         }
 
         if self.position.x < EDGE_MARGIN {

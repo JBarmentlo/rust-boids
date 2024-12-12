@@ -22,7 +22,7 @@ async fn main() {
     // let w: usize = 800;
     // let h: usize = 600;
 
-    let mut flock = Flock::random(2);
+    let mut flock = Flock::random(5);
     // let mut buffer = vec![CellState::Dead; w * h];
 
     let mut image = Image::gen_image_color(w as u16, h as u16, WHITE);
@@ -67,6 +67,7 @@ async fn main() {
         flock = flock.next_step();
         let flock_duration = flock_start.elapsed();
         println!("Boid Compute time: {:?}.\nDraw time: {:?}", flock_duration, draw_duration);
+        // thread::sleep(Duration::from_millis(100));
         next_frame().await
     }
 }
